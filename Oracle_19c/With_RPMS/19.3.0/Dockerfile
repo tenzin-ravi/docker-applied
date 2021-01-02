@@ -5,7 +5,7 @@
 # ORACLE DOCKERFILES PROJECT
 # --------------------------
 # This is the Dockerfile for Oracle Database 19c
-# 
+#
 # REQUIRED FILES TO BUILD THIS IMAGE
 # ----------------------------------
 # (1) db_home.zip
@@ -15,8 +15,8 @@
 # HOW TO BUILD THIS IMAGE
 # -----------------------
 # Put all downloaded files in the same directory as this Dockerfile
-# Run: 
-#      $ docker build -t oracle/database:19.3.0-${EDITION} . 
+# Run:
+#      $ docker build -t oracle/database:19.3.0-${EDITION} .
 #
 # Pull base image
 # ---------------
@@ -76,8 +76,11 @@ RUN yum -y localinstall /opt/compat-libcap1-1.10-7.el7.x86_64.rpm && \
     yum -y localinstall /opt/compat-libstdc++-33-3.2.3-72.el7.x86_64.rpm && \
     yum -y localinstall /opt/oracle-database-preinstall-19c-1.0-1.el7.x86_64.rpm && \
     yum -y clean all && \
-    rm -f /opt/*.rpm 
+    rm -f /opt/*.rpm
+RUN chown -R oracle:oinstall /opt/oracle
+USER oracle
 ADD oracle19c.tar.gz /opt/
-COPY wallet --chown=oracle:oinstall /opt/wallet
+COPY --chown=oracle:oinstall wallet /opt/oracle/wallet
+#RUN chown -R oracle:oinstall /opt/oracle/
 CMD exec $ORACLE_BASE/$RUN_FILE
 
